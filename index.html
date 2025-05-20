@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShoeStore – Compare Shoes</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 2rem;
+        background: #f9f9f9;
+        color: #333;
+      }
+      h1 {
+        text-align: center;
+      }
+      .shoe-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+      .shoe-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        text-align: center;
+      }
+      .shoe-card img {
+        width: 100%;
+        height: 160px;
+        object-fit: contain;
+      }
+      .compare-btn {
+        margin-top: 10px;
+        padding: 6px 12px;
+        cursor: pointer;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+      }
+      .compare-section {
+        margin-top: 3rem;
+        display: none;
+      }
+      .compare-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .compare-table th,
+      .compare-table td {
+        border: 1px solid #ccc;
+        padding: 1rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="text-align: center;">
+      <h1>Shoe Store – Compare Shoes</h1>
+      <p>Select two shoes to compare their features and prices.</p>
+      <p>Click the "Compare" button on each shoe card to add it to the comparison.</p>
+
+    </div>
+
+    <div class="shoe-grid" id="shoeGrid"></div>
+
+    <div class="compare-section" id="compareSection">
+      <h2>Comparison</h2>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th id="compareShoe1Name"></th>
+            <th id="compareShoe2Name"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Price</td>
+            <td id="compareShoe1Price"></td>
+            <td id="compareShoe2Price"></td>
+          </tr>
+          <tr>
+            <td>Brand</td>
+            <td id="compareShoe1Brand"></td>
+            <td id="compareShoe2Brand"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      const shoes = [
+        {
+          name: "Air Max 90",
+          brand: "Nike",
+          price: 120,
+          rating: 4.5,
+          image: "./shoesImages/Air Max 90.jpeg",
+          features: ["Cushioned sole", "Retro style", "Breathable mesh"],
+          saleStatus: "featured",
+          description:
+            "A timeless classic with modern cushioning. Perfect blend of comfort and street style.",
+        },
+        {
+          name: "Ultraboost 21",
+          brand: "Adidas",
+          price: 180,
+          rating: 4.8,
+          image: "./shoesImages/Ultraboost 21.jpeg",
+          features: ["Boost midsole", "Primeknit upper", "Energy return"],
+          saleStatus: "new",
+          description:
+            "Maximum comfort and performance for runners. Responsive design with all-day support.",
+        },
+        {
+          name: "Gel-Kayano 28",
+          brand: "ASICS",
+          price: 160,
+          rating: 4.6,
+          image: "./shoesImages/Gel-Kayano 28.jpeg",
+          features: ["Stability support", "Gel cushioning", "Durable outsole"],
+          saleStatus: "sale",
+          description:
+            "Engineered for overpronators with premium gel comfort. Built for endurance and support.",
+        },
+        {
+          name: "Chuck Taylor All Star",
+          brand: "Converse",
+          price: 65,
+          rating: 4.2,
+          image: "./shoesImages/Chuck Taylor All Star.jpeg",
+          features: ["Canvas upper", "Iconic design", "Rubber sole"],
+          saleStatus: "featured",
+          description:
+            "An iconic sneaker for everyday style. Timeless look with unmatched versatility.",
+        },
+        {
+          name: "ZoomX Vaporfly Next",
+          brand: "Nike",
+          price: 250,
+          rating: 4.9,
+          image: "./shoesImages/ZoomX Vaporfly Next.jpeg",
+          features: ["Carbon plate", "ZoomX foam", "Race-ready"],
+          saleStatus: "new",
+          description:
+            "Elite racing shoe for serious runners. Unmatched speed, bounce, and energy return.",
+        },
+        {
+          name: "NMD_R1",
+          brand: "Adidas",
+          price: 140,
+          rating: 4.4,
+          image: "./shoesImages/NMD_R1.jpeg",
+          features: ["Sock-like fit", "Boost midsole", "Streetwear look"],
+          saleStatus: "sale",
+          description:
+            "Sleek and comfy street sneakers. Inspired by retro tech with modern vibes.",
+        },
+        {
+          name: "Clifton 8",
+          brand: "Hoka One One",
+          price: 130,
+          rating: 4.7,
+          image: "./shoesImages/Clifton 8.jpeg",
+          features: ["Meta-Rocker", "Lightweight cushion", "Plush ride"],
+          saleStatus: "featured",
+          description:
+            "Feather-light performance for distance runs. Smooth transitions and soft landings.",
+        },
+        {
+          name: "Old Skool",
+          brand: "Vans",
+          price: 70,
+          rating: 4.3,
+          image: "./shoesImages/Old Skool.jpeg",
+          features: ["Suede and canvas", "Skate durability", "Waffle sole"],
+          saleStatus: "sale",
+          description:
+            "Classic skate shoe with heritage vibes. Durable, stylish, and everyday-ready.",
+        },
+        {
+          name: "FuelCell Rebel v2",
+          brand: "New Balance",
+          price: 130,
+          rating: 4.5,
+          image: "./shoesImages/FuelCell Rebel v2.jpeg",
+          features: ["FuelCell foam", "Lightweight", "Daily trainer"],
+          saleStatus: "new",
+          description:
+            "Explosive energy return in every step. Built for runners who love speed and comfort.",
+        },
+        {
+          name: "Pegasus 40",
+          brand: "Nike",
+          price: 130,
+          rating: 4.6,
+          image: "./shoesImages/Pegasus 40.jpeg",
+          features: ["React foam", "Durable outsole", "Breathable upper"],
+          saleStatus: "featured",
+          description:
+            "Everyday trainer for any distance. Reliable comfort with a responsive ride.",
+        },
+      ];
+      const shoeGrid = document.getElementById("shoeGrid");
+      const compareSection = document.getElementById("compareSection");
+      let selectedShoes = [];
+
+      function renderShoes() {
+        shoes.forEach((shoe, index) => {
+          const card = document.createElement("div");
+          card.className = "shoe-card";
+          card.innerHTML = `
+        <img src="${shoe.image}" alt="${shoe.name}" />
+        <h3> ${shoe.brand} ${shoe.name}</h3>
+        <p><strong>$ ${shoe.price}</strong></p>
+        <button class="compare-btn" onclick="selectForCompare(${index})">Compare</button>
+      `;
+          shoeGrid.appendChild(card);
+        });
+      }
+
+      function selectForCompare(index) {
+        if (selectedShoes.length === 2) {
+          alert("You can compare only 2 shoes at a time.");
+          return;
+        }
+        if (!selectedShoes.includes(index)) {
+          selectedShoes.push(index);
+        }
+
+        if (selectedShoes.length === 2) {
+          showComparison();
+        }
+      }
+
+      function showComparison() {
+        const [shoe1, shoe2] = selectedShoes.map((i) => shoes[i]);
+        compareSection.style.display = "block";
+
+        document.getElementById("compareShoe1Name").textContent = shoe1.name;
+        document.getElementById("compareShoe2Name").textContent = shoe2.name;
+        document.getElementById("compareShoe1Name").textContent = shoe1.rating;
+        document.getElementById("compareShoe2Name").textContent = shoe2.rating;
+        document.getElementById("compareShoe1Price").textContent = shoe1.price;
+        document.getElementById("compareShoe2Price").textContent = shoe2.price;
+        document.getElementById("compareShoe1Brand").textContent = shoe1.brand;
+        document.getElementById("compareShoe2Brand").textContent = shoe2.brand;
+      }
+
+      renderShoes();
+    </script>
+  </body>
+</html>
