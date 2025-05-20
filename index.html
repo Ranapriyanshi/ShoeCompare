@@ -29,6 +29,12 @@
         box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
         padding: 1rem;
         text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .shoe-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
       }
 
       .shoe-card img {
@@ -63,12 +69,19 @@
     <div style="text-align: center">
       <h1>Shoe Store – Compare Shoes</h1>
       <p>Select two shoes to compare their features and prices.</p>
-      <button style="padding: 15px 20px; background-color: #333; color: white; border-radius: 25px; cursor: pointer;"
-      onclick="alert('Choose any two of your favourite shoes 👟 to compare.')">
-        Start Comparison 
+      <button
+        style="
+          padding: 15px 20px;
+          background-color: #333;
+          color: white;
+          border-radius: 25px;
+          cursor: pointer;
+        "
+        onclick="alert('Choose any two of your favourite shoes 👟 to compare.')"
+      >
+        Start Comparison
       </button>
     </div>
-
 
     <div class="compare-section" id="compareSection">
       <div
@@ -118,6 +131,11 @@
             <td>Ratings ⭐</td>
             <td id="compareShoe1Rating"></td>
             <td id="compareShoe2Rating"></td>
+          </tr>
+          <tr>
+            <td>Features</td>
+            <td id="compareShoe1Features"></td>
+            <td id="compareShoe2Features"></td>
           </tr>
           <tr>
             <td>Description</td>
@@ -242,6 +260,28 @@
           description:
             "Everyday trainer for any distance. Reliable comfort with a responsive ride.",
         },
+        {
+          name: "Wave Rider 27",
+          brand: "Mizuno",
+          price: 135,
+          rating: 4.4,
+          image: "./shoesImages/Wave Rider 27.jpeg",
+          features: ["MIZUNO ENERZY", "Wave Plate", "Smooth transitions"],
+          saleStatus: "new",
+          description:
+            "A perfect balance of cushioning and responsiveness. Designed for daily runs with excellent stability and energy return.",
+        },
+        {
+          name: "Cloudswift",
+          brand: "On",
+          price: 150,
+          rating: 4.5,
+          image: "./shoesImages/Cloudswift.jpeg",
+          features: ["CloudTec sole", "Helion superfoam", "Urban speed"],
+          saleStatus: "featured",
+          description:
+            "Engineered for city running, the Cloudswift delivers a soft but snappy ride. Lightweight feel with solid grip and modern aesthetics.",
+        },
       ];
 
       const shoeGrid = document.getElementById("shoeGrid");
@@ -255,7 +295,8 @@
           card.innerHTML = `
           <img src="${shoe.image}" alt="${shoe.name}" />
           <h3>${shoe.brand} ${shoe.name}</h3>
-          <p><strong>$${shoe.price}</strong></p>
+          <p><span>Rating: ${shoe.rating} ⭐</spam> &nbsp;<strong>Price:$${shoe.price}</strong> </p>
+            <p><strong>Features: </strong>${shoe.features} </p>
           <label class="compare-checkbox">
             <input type="checkbox" onchange="toggleCompare(${index}, this)" />
             Compare
@@ -318,6 +359,10 @@
           shoe1.rating;
         document.getElementById("compareShoe2Rating").textContent =
           shoe2.rating;
+        document.getElementById("compareShoe1Features").textContent =
+          shoe1.features.join(", ");
+        document.getElementById("compareShoe2Features").textContent =
+          shoe2.features.join(", ");
         document.getElementById("compareShoe1Description").textContent =
           shoe1.description;
         document.getElementById("compareShoe2Description").textContent =
