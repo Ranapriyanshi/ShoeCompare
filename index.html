@@ -11,15 +11,18 @@
         background: #f9f9f9;
         color: #333;
       }
+
       h1 {
         text-align: center;
       }
+
       .shoe-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
         gap: 1.5rem;
         margin-top: 2rem;
       }
+
       .shoe-card {
         background: white;
         border-radius: 8px;
@@ -27,28 +30,27 @@
         padding: 1rem;
         text-align: center;
       }
+
       .shoe-card img {
         width: 100%;
         height: 160px;
         object-fit: contain;
       }
-      .compare-btn {
+
+      .compare-checkbox {
         margin-top: 10px;
-        padding: 6px 12px;
-        cursor: pointer;
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
       }
+
       .compare-section {
-        margin-top: 3rem;
+        margin-bottom: 2rem;
         display: none;
       }
+
       .compare-table {
         width: 100%;
         border-collapse: collapse;
       }
+
       .compare-table th,
       .compare-table td {
         border: 1px solid #ccc;
@@ -58,21 +60,45 @@
     </style>
   </head>
   <body>
-    <div style="text-align: center;">
+    <div style="text-align: center">
       <h1>Shoe Store – Compare Shoes</h1>
       <p>Select two shoes to compare their features and prices.</p>
-      <p>Click the "Compare" button on each shoe card to add it to the comparison.</p>
-
+      <button style="padding: 15px 20px; background-color: #333; color: white; border-radius: 25px; cursor: pointer;"
+      onclick="alert('Choose any two of your favourite shoes 👟 to compare.')">
+        Start Comparison 
+      </button>
     </div>
 
-    <div class="shoe-grid" id="shoeGrid"></div>
 
     <div class="compare-section" id="compareSection">
-      <h2>Comparison</h2>
+      <div
+        style="
+          text-align: center;
+          margin-bottom: 1rem;
+          display: flex;
+          justify-content: space-between;
+        "
+      >
+        <h2>Comparison</h2>
+        <button
+          onclick="resetComparison()"
+          style="
+            margin-bottom: 1rem;
+            padding: 6px 12px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+          "
+        >
+          Reset Comparison
+        </button>
+      </div>
       <table class="compare-table">
         <thead>
           <tr>
-            <th>Feature</th>
+            <th>Shoe Name</th>
             <th id="compareShoe1Name"></th>
             <th id="compareShoe2Name"></th>
           </tr>
@@ -88,9 +114,21 @@
             <td id="compareShoe1Brand"></td>
             <td id="compareShoe2Brand"></td>
           </tr>
+          <tr>
+            <td>Ratings ⭐</td>
+            <td id="compareShoe1Rating"></td>
+            <td id="compareShoe2Rating"></td>
+          </tr>
+          <tr>
+            <td>Description</td>
+            <td id="compareShoe1Description"></td>
+            <td id="compareShoe2Description"></td>
+          </tr>
         </tbody>
       </table>
     </div>
+
+    <div class="shoe-grid" id="shoeGrid"></div>
 
     <script>
       const shoes = [
@@ -205,6 +243,7 @@
             "Everyday trainer for any distance. Reliable comfort with a responsive ride.",
         },
       ];
+
       const shoeGrid = document.getElementById("shoeGrid");
       const compareSection = document.getElementById("compareSection");
       let selectedShoes = [];
@@ -214,26 +253,46 @@
           const card = document.createElement("div");
           card.className = "shoe-card";
           card.innerHTML = `
-        <img src="${shoe.image}" alt="${shoe.name}" />
-        <h3> ${shoe.brand} ${shoe.name}</h3>
-        <p><strong>$ ${shoe.price}</strong></p>
-        <button class="compare-btn" onclick="selectForCompare(${index})">Compare</button>
-      `;
+          <img src="${shoe.image}" alt="${shoe.name}" />
+          <h3>${shoe.brand} ${shoe.name}</h3>
+          <p><strong>$${shoe.price}</strong></p>
+          <label class="compare-checkbox">
+            <input type="checkbox" onchange="toggleCompare(${index}, this)" />
+            Compare
+          </label>
+        `;
           shoeGrid.appendChild(card);
         });
       }
 
-      function selectForCompare(index) {
-        if (selectedShoes.length === 2) {
-          alert("You can compare only 2 shoes at a time.");
-          return;
-        }
-        if (!selectedShoes.includes(index)) {
+      function resetComparison() {
+        selectedShoes = [];
+        compareSection.style.display = "none";
+
+        // Uncheck all checkboxes
+        document
+          .querySelectorAll('.compare-checkbox input[type="checkbox"]')
+          .forEach((cb) => {
+            cb.checked = false;
+          });
+      }
+
+      function toggleCompare(index, checkbox) {
+        if (checkbox.checked) {
+          if (selectedShoes.length === 2) {
+            alert("You can only compare 2 shoes at a time.");
+            checkbox.checked = false;
+            return;
+          }
           selectedShoes.push(index);
+        } else {
+          selectedShoes = selectedShoes.filter((i) => i !== index);
         }
 
         if (selectedShoes.length === 2) {
           showComparison();
+        } else {
+          compareSection.style.display = "none";
         }
       }
 
@@ -241,14 +300,28 @@
         const [shoe1, shoe2] = selectedShoes.map((i) => shoes[i]);
         compareSection.style.display = "block";
 
-        document.getElementById("compareShoe1Name").textContent = shoe1.name;
-        document.getElementById("compareShoe2Name").textContent = shoe2.name;
-        document.getElementById("compareShoe1Name").textContent = shoe1.rating;
-        document.getElementById("compareShoe2Name").textContent = shoe2.rating;
-        document.getElementById("compareShoe1Price").textContent = shoe1.price;
-        document.getElementById("compareShoe2Price").textContent = shoe2.price;
+        document.getElementById(
+          "compareShoe1Name"
+        ).textContent = `${shoe1.brand} ${shoe1.name}`;
+        document.getElementById(
+          "compareShoe2Name"
+        ).textContent = `${shoe2.brand} ${shoe2.name}`;
+        document.getElementById(
+          "compareShoe1Price"
+        ).textContent = `$${shoe1.price}`;
+        document.getElementById(
+          "compareShoe2Price"
+        ).textContent = `$${shoe2.price}`;
         document.getElementById("compareShoe1Brand").textContent = shoe1.brand;
         document.getElementById("compareShoe2Brand").textContent = shoe2.brand;
+        document.getElementById("compareShoe1Rating").textContent =
+          shoe1.rating;
+        document.getElementById("compareShoe2Rating").textContent =
+          shoe2.rating;
+        document.getElementById("compareShoe1Description").textContent =
+          shoe1.description;
+        document.getElementById("compareShoe2Description").textContent =
+          shoe2.description;
       }
 
       renderShoes();
