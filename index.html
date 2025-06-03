@@ -10,6 +10,8 @@
         padding: 2rem;
         background: #f9f9f9;
         color: #333;
+        background-image: radial-gradient(#ccc 1px, transparent 1px);
+        background-size: 20px 20px;
       }
 
       h1 {
@@ -38,8 +40,12 @@
       }
 
       .shoe-card img {
-        width: 100%;
-        height: 160px;
+        width: auto;
+        height: auto;
+        max-height: 180px;
+        max-width: 100%;
+        display: block;
+        margin: 0 auto;
         object-fit: contain;
       }
 
@@ -55,6 +61,8 @@
       .compare-table {
         width: 100%;
         border-collapse: collapse;
+        background: white;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
       }
 
       .compare-table th,
@@ -96,88 +104,292 @@
     </style>
   </head>
   <body>
-    <div style="text-align: center">
-      <h1>Shoe Store – Compare Shoes</h1>
-      <p>Select two shoes to compare their features and prices.</p>
-      <button
-        style="
-          padding: 15px 20px;
-          background-color: #333;
-          color: white;
-          border-radius: 25px;
-          cursor: pointer;
-        "
-        onclick="alert('Choose any two of your favourite shoes 👟 to compare.')"
-      >
-        Start Comparison
-      </button>
-    </div>
+    <!-- Login Form -->
+    <div
+      id="authPage"
+      style="
+        max-width: 400px;
+        margin: 5rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <div id="loginPage">
+        <h2 style="text-align: center">Welcome to Shoe Store</h2>
+        <p style="text-align: center">Please log in to continue</p>
+        <form id="loginForm">
+          <input
+            type="text"
+            id="loginUsername"
+            placeholder="Username"
+            required
+            style="
+              width: 100%;
+              padding: 10px;
+              margin-top: 1rem;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+            "
+          />
+          <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            required
+            style="
+              width: 100%;
+              padding: 10px;
+              margin-top: 1rem;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+            "
+          />
+          <button
+            type="submit"
+            style="
+              width: 100%;
+              padding: 12px;
+              margin-top: 1.5rem;
+              background: #333;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+            "
+          >
+            Login
+          </button>
+        </form>
+        <p style="text-align: center; margin-top: 1rem">
+          <button
+            onclick="toggleSignup(true)"
+            style="
+              background: none;
+              border: none;
+              color: #007bff;
+              cursor: pointer;
+            "
+          >
+            Don't have an account?
+          </button>
+        </p>
+      </div>
 
-    <div class="compare-section" id="compareSection">
-      <div
-        style="
-          text-align: center;
-          margin-bottom: 1rem;
-          display: flex;
-          justify-content: space-between;
-        "
-      >
-        <h2>Comparison</h2>
-        <button
-          onclick="resetComparison()"
+      <!-- Signup Form (Hidden by Default) -->
+      <div id="signupPage" style="display: none">
+        <h2 style="text-align: center">Create Your Account</h2>
+        <p style="text-align: center">Sign up to get started</p>
+        <form id="signupForm">
+          <input
+            type="text"
+            id="signupUsername"
+            placeholder="Username"
+            required
+            style="
+              width: 100%;
+              padding: 10px;
+              margin-top: 1rem;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+            "
+          />
+          <input
+            type="password"
+            id="signupPassword"
+            placeholder="Password"
+            required
+            style="
+              width: 100%;
+              padding: 10px;
+              margin-top: 1rem;
+              border: 1px solid #ccc;
+              border-radius: 4px;
+            "
+          />
+          <button
+            type="submit"
+            style="
+              width: 100%;
+              padding: 12px;
+              margin-top: 1.5rem;
+              background: #333;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+            "
+          >
+            Create Account
+          </button>
+        </form>
+        <p style="text-align: center; margin-top: 1rem">
+          <button
+            onclick="toggleSignup(false)"
+            style="
+              background: none;
+              border: none;
+              color: #007bff;
+              cursor: pointer;
+            "
+          >
+            Already have an account?
+          </button>
+        </p>
+      </div>
+      <!-- <h2 style="text-align: center">Welcome to Shoe Store</h2>
+      <p style="text-align: center">Please log in or sign up to continue</p>
+      <form id="loginForm">
+        <input
+          type="text"
+          id="username"
+          placeholder="Username"
+          required
           style="
-            margin-bottom: 1rem;
-            padding: 6px 12px;
-            background: #dc3545;
+            width: 100%;
+            padding: 10px;
+            margin-top: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+          "
+        />
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          required
+          style="
+            width: 100%;
+            padding: 10px;
+            margin-top: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+          "
+        />
+        <button
+          type="submit"
+          style="
+            width: 100%;
+            padding: 12px;
+            margin-top: 1.5rem;
+            background: #333;
             color: white;
             border: none;
             border-radius: 4px;
             cursor: pointer;
           "
         >
-          Reset Comparison
+          Login
         </button>
-      </div>
-      <table class="compare-table">
-        <thead>
-          <tr>
-            <th>Shoe Name</th>
-            <th id="compareShoe1Name"></th>
-            <th id="compareShoe2Name"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Price</td>
-            <td id="compareShoe1Price"></td>
-            <td id="compareShoe2Price"></td>
-          </tr>
-          <tr>
-            <td>Brand</td>
-            <td id="compareShoe1Brand"></td>
-            <td id="compareShoe2Brand"></td>
-          </tr>
-          <tr>
-            <td>Ratings ⭐</td>
-            <td id="compareShoe1Rating"></td>
-            <td id="compareShoe2Rating"></td>
-          </tr>
-          <tr>
-            <td>Features</td>
-            <td id="compareShoe1Features"></td>
-            <td id="compareShoe2Features"></td>
-          </tr>
-          <tr>
-            <td>Description</td>
-            <td id="compareShoe1Description"></td>
-            <td id="compareShoe2Description"></td>
-          </tr>
-        </tbody>
-      </table>
+      </form> -->
     </div>
 
-    <div class="shoe-grid" id="shoeGrid"></div>
+    <!-- Main App Content (Hidden Initially) -->
+    <div id="appContent" style="display: none">
+      <!-- Logout -->
+      <button
+        onclick="logout()"
+        style="
+          margin: 1rem auto;
+          display: block;
+          background: #555;
+          color: white;
+          padding: 10px 20px;
+          border-radius: 6px;
+          cursor: pointer;
+        "
+      >
+        Logout
+      </button>
 
+      <!-- Heading & Button -->
+      <div id="mainPage" style="text-align: center">
+        <h1>Shoe Store – Compare Shoes</h1>
+        <p>Select two shoes to compare their features and prices.</p>
+        <button
+          style="
+            padding: 15px 20px;
+            background-color: #333;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+          "
+          onclick="alert('Choose any two of your favourite shoes 👟 to compare.')"
+        >
+          Start Comparison
+        </button>
+      </div>
+
+      <!-- Comparison Table -->
+      <div class="compare-section" id="compareSection">
+        <div
+          style="
+            text-align: center;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+          "
+        >
+          <h2>Comparison</h2>
+          <button
+            onclick="resetComparison()"
+            style="
+              margin-bottom: 1rem;
+              padding: 6px 12px;
+              background: #dc3545;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+            "
+          >
+            Reset Comparison
+          </button>
+        </div>
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Shoe Name</th>
+              <th id="compareShoe1Name"></th>
+              <th id="compareShoe2Name"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Price</td>
+              <td id="compareShoe1Price"></td>
+              <td id="compareShoe2Price"></td>
+            </tr>
+            <tr>
+              <td>Brand</td>
+              <td id="compareShoe1Brand"></td>
+              <td id="compareShoe2Brand"></td>
+            </tr>
+            <tr>
+              <td>Ratings ⭐</td>
+              <td id="compareShoe1Rating"></td>
+              <td id="compareShoe2Rating"></td>
+            </tr>
+            <tr>
+              <td>Features</td>
+              <td id="compareShoe1Features"></td>
+              <td id="compareShoe2Features"></td>
+            </tr>
+            <tr>
+              <td>Description</td>
+              <td id="compareShoe1Description"></td>
+              <td id="compareShoe2Description"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Shoe Cards -->
+      <div class="shoe-grid" id="shoeGrid"></div>
+    </div>
+
+    <!-- JavaScript -->
     <script>
       const shoes = [
         {
@@ -323,15 +535,15 @@
           const card = document.createElement("div");
           card.className = "shoe-card";
           card.innerHTML = `
-          <img src="${shoe.image}" alt="${shoe.name}" />
-          <h3>${shoe.brand} ${shoe.name}</h3>
-          <p><span>Rating: ${shoe.rating} ⭐</spam> &nbsp;<strong>Price:$${shoe.price}</strong> </p>
-            <p><strong>Features: </strong>${shoe.features} </p>
-          <label class="compare-checkbox">
-            <input type="checkbox" onchange="toggleCompare(${index}, this)" />
-            Compare
-          </label>
-        `;
+            <img src="${shoe.image}" alt="${shoe.name}" />
+            <h3>${shoe.brand} ${shoe.name}</h3>
+            <p><span>Rating: ${shoe.rating} ⭐</span> &nbsp;<strong>Price: $${shoe.price}</strong></p>
+            <p><strong>Features: </strong>${shoe.features}</p>
+            <label class="compare-checkbox">
+              <input type="checkbox" onchange="toggleCompare(${index}, this)" />
+              Compare
+            </label>
+          `;
           shoeGrid.appendChild(card);
         });
       }
@@ -339,8 +551,6 @@
       function resetComparison() {
         selectedShoes = [];
         compareSection.style.display = "none";
-
-        // Uncheck all checkboxes
         document
           .querySelectorAll('.compare-checkbox input[type="checkbox"]')
           .forEach((cb) => {
@@ -367,10 +577,20 @@
         }
       }
 
+      function toggleCardSelection(cardDiv) {
+        const checkbox = cardDiv.querySelector(".product-checkbox");
+        checkbox.checked = !checkbox.checked;
+
+        if (checkbox.checked) {
+          cardDiv.classList.add("selected");
+        } else {
+          cardDiv.classList.remove("selected");
+        }
+      }
+
       function showComparison() {
         const [shoe1, shoe2] = selectedShoes.map((i) => shoes[i]);
         compareSection.style.display = "block";
-
         document.getElementById(
           "compareShoe1Name"
         ).textContent = `${shoe1.brand} ${shoe1.name}`;
@@ -399,7 +619,61 @@
           shoe2.description;
       }
 
+      function logout() {
+        document.getElementById("authPage").style.display = "block";
+        document.getElementById("appContent").style.display = "none";
+        resetComparison();
+      }
+
       renderShoes();
+
+      function toggleSignup(showSignup) {
+        document.getElementById("loginPage").style.display = showSignup
+          ? "none"
+          : "block";
+        document.getElementById("signupPage").style.display = showSignup
+          ? "block"
+          : "none";
+      }
+
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const username = document
+            .getElementById("loginUsername")
+            .value.trim();
+          const password = document
+            .getElementById("loginPassword")
+            .value.trim();
+
+          if (username && password) {
+            document.getElementById("authPage").style.display = "none";
+            document.getElementById("appContent").style.display = "block";
+          } else {
+            alert("Please enter both username and password.");
+          }
+        });
+
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const username = document
+            .getElementById("signupUsername")
+            .value.trim();
+          const password = document
+            .getElementById("signupPassword")
+            .value.trim();
+
+          if (username && password) {
+            alert("Account created successfully! Please log in.");
+            toggleSignup(false);
+            document.getElementById("signupForm").reset();
+          } else {
+            alert("Please enter a username and password.");
+          }
+        });
     </script>
   </body>
 </html>
