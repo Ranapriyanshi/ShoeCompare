@@ -288,20 +288,22 @@
     <!-- Main App Content (Hidden Initially) -->
     <div id="appContent" style="display: none">
       <!-- Logout -->
-      <button
-        onclick="logout()"
-        style="
-          margin: 1rem auto;
-          display: block;
-          background: #555;
-          color: white;
-          padding: 10px 20px;
-          border-radius: 6px;
-          cursor: pointer;
-        "
-      >
-        Logout
-      </button>
+      <div style="display: flex; justify-content: end; align-items: center">
+        <button
+          onclick="logout()"
+          style="
+            /* margin: 1rem auto; */
+            /* display: block; */
+            background: #555;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+          "
+        >
+          Logout
+        </button>
+      </div>
 
       <!-- Heading & Button -->
       <div id="mainPage" style="text-align: center">
@@ -535,7 +537,7 @@
           const card = document.createElement("div");
           card.className = "shoe-card";
           card.innerHTML = `
-            <img src="${shoe.image}" alt="${shoe.name}" />
+            <img src="${shoe.image}" alt="${shoe.name}" onerror="this.src='default-shoe.jpg'" />
             <h3>${shoe.brand} ${shoe.name}</h3>
             <p><span>Rating: ${shoe.rating} ⭐</span> &nbsp;<strong>Price: $${shoe.price}</strong></p>
             <p><strong>Features: </strong>${shoe.features}</p>
@@ -589,6 +591,8 @@
       }
 
       function showComparison() {
+        window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top smoothly
+
         const [shoe1, shoe2] = selectedShoes.map((i) => shoes[i]);
         compareSection.style.display = "block";
         document.getElementById(
@@ -636,44 +640,32 @@
           : "none";
       }
 
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const username = document
-            .getElementById("loginUsername")
-            .value.trim();
-          const password = document
-            .getElementById("loginPassword")
-            .value.trim();
-
-          if (username && password) {
+      document.getElementById("loginForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const user = localStorage.getItem("user");
+        const username = document.getElementById("loginUsername").value;
+        const password = document.getElementById("loginPassword").value;
+        if (user) {
+          const userObj = JSON.parse(user);
+          if (userObj.username === username && userObj.password === password) {
             document.getElementById("authPage").style.display = "none";
             document.getElementById("appContent").style.display = "block";
           } else {
-            alert("Please enter both username and password.");
+            alert("Invalid credentials");
           }
-        });
+        } else {
+          alert("No account found. Please sign up.");
+        }
+      });
 
-      document
-        .getElementById("signupForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const username = document
-            .getElementById("signupUsername")
-            .value.trim();
-          const password = document
-            .getElementById("signupPassword")
-            .value.trim();
-
-          if (username && password) {
-            alert("Account created successfully! Please log in.");
-            toggleSignup(false);
-            document.getElementById("signupForm").reset();
-          } else {
-            alert("Please enter a username and password.");
-          }
-        });
+      document.getElementById("signupForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const username = document.getElementById("signupUsername").value;
+        const password = document.getElementById("signupPassword").value;
+        localStorage.setItem("user", JSON.stringify({ username, password }));
+        alert("Signup successful. Please log in.");
+        toggleSignup(false);
+      });
     </script>
   </body>
 </html>
